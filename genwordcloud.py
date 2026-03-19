@@ -29,21 +29,21 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
 
     def initAlgorithm(self, config):
         self.addParameter(
-            QgsProcessingParameterFeatureSource('INPUT', 'Input layer', [QgsProcessing.TypeVector])
+            QgsProcessingParameterFeatureSource('INPUT', 'Input layer', [QgsProcessing.SourceType.TypeVector])
         )
         self.addParameter(
             QgsProcessingParameterField(
                 'ATTRIBUTE',
                 'Select attribute field for word cloud',
                 parentLayerParameterName='INPUT',
-                type=QgsProcessingParameterField.String
+                type=QgsProcessingParameterField.DataType.String
             )
         )
         self.addParameter(
             QgsProcessingParameterNumber(
                 'WIDTH',
                 'Output image width',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=500
             )
         )
@@ -51,7 +51,7 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'HEIGHT',
                 'Output image height',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=500
             )
         )
@@ -59,7 +59,7 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MAX_WORDS',
                 'Maximum number of words',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=200
             )
         )
@@ -67,7 +67,7 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MIN_FONT',
                 'Minimum font size',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=4
             )
         )
@@ -75,7 +75,7 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MAX_FONT',
                 'Maximum font size (0 = Automatic sizing)',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=0
             )
         )
@@ -83,7 +83,7 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MIN_WORD_LEN',
                 'Minimum word length',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=0
             )
         )
@@ -176,7 +176,7 @@ class WordCloudAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return WordCloudAlgorithm()

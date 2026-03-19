@@ -44,18 +44,18 @@ class HeatmapDialog(QDialog, FORM_CLASS):
         self.setupUi(self)
         self.iface = iface
         self.canvas = iface.mapCanvas()
-        self.layerComboBox.setFilters(QgsMapLayerProxyModel.VectorLayer)
+        self.layerComboBox.setFilters(QgsMapLayerProxyModel.Filter.VectorLayer)
         self.layerComboBox.layerChanged.connect(self.userSelectsLayer)
-        self.dtComboBox.setFilters(QgsFieldProxyModel.String | QgsFieldProxyModel.Date | QgsFieldProxyModel.Time)
-        self.dateComboBox.setFilters(QgsFieldProxyModel.String | QgsFieldProxyModel.Date)
-        self.timeComboBox.setFilters(QgsFieldProxyModel.String | QgsFieldProxyModel.Time)
-        self.categoryComboBox.setFilters(QgsFieldProxyModel.String | QgsFieldProxyModel.Numeric)
+        self.dtComboBox.setFilters(QgsFieldProxyModel.Filter.String | QgsFieldProxyModel.Filter.Date | QgsFieldProxyModel.Filter.Time)
+        self.dateComboBox.setFilters(QgsFieldProxyModel.Filter.String | QgsFieldProxyModel.Filter.Date)
+        self.timeComboBox.setFilters(QgsFieldProxyModel.Filter.String | QgsFieldProxyModel.Filter.Time)
+        self.categoryComboBox.setFilters(QgsFieldProxyModel.Filter.String | QgsFieldProxyModel.Filter.Numeric)
         self.dtRadioButton.clicked.connect(self.enableComponents)
         self.notdtRadioButton.clicked.connect(self.enableComponents)
         self.radialComboBox.addItems(OPTIONMENU)
         self.circleComboBox.addItems(OPTIONMENU)
-        self.buttonBox.button(QDialogButtonBox.Ok).setText("Create Chart")
-        self.buttonBox.button(QDialogButtonBox.Help).clicked.connect(self.help)
+        self.buttonBox.button(QDialogButtonBox.StandardButton.Ok).setText("Create Chart")
+        self.buttonBox.button(QDialogButtonBox.StandardButton.Help).clicked.connect(self.help)
 
     def help(self):
         url = QUrl.fromLocalFile(os.path.dirname(__file__) + "/index.html").toString()
@@ -194,12 +194,12 @@ class HeatmapDialog(QDialog, FORM_CLASS):
         uniqueCustomFields = []
         if self.selectedRadialUnit == 5 or self.selectedCircleUnit == 5:
             if self.customFieldCol == -1:
-                self.iface.messageBar().pushMessage("", "Custom Category Filed cannot be selected because none is selected" , level=Qgis.Warning, duration=3)
+                self.iface.messageBar().pushMessage("", "Custom Category Filed cannot be selected because none is selected" , level=Qgis.MessageLevel.Warning, duration=3)
                 return
             uniqueCustomFields = self.selectedLayer.uniqueValues(self.customFieldCol)
             if len(uniqueCustomFields) > 40:
                 # We have too many categories
-                self.iface.messageBar().pushMessage("", "There are too many custom categories for a chart" , level=Qgis.Warning, duration=3)
+                self.iface.messageBar().pushMessage("", "There are too many custom categories for a chart" , level=Qgis.MessageLevel.Warning, duration=3)
                 return;
         folder = askForFolder(self)
         if not folder:
@@ -209,7 +209,7 @@ class HeatmapDialog(QDialog, FORM_CLASS):
         data   = AutoDict()
         rvlist = AutoDict()
         cvlist = AutoDict()
-        request = QgsFeatureRequest().setFlags(QgsFeatureRequest.NoGeometry)
+        request = QgsFeatureRequest().setFlags(QgsFeatureRequest.Flag.NoGeometry)
         isdt = self.dtRadioButton.isChecked()
         attributes = []
         if isdt:
@@ -254,12 +254,12 @@ class HeatmapDialog(QDialog, FORM_CLASS):
             cvlist[cv] += 1
             data[rv][cv] += 1
         if not any(cvlist) or not any(rvlist):
-            self.iface.messageBar().pushMessage("", "Valid dates were not found" , level=Qgis.Warning, duration=3)
+            self.iface.messageBar().pushMessage("", "Valid dates were not found" , level=Qgis.MessageLevel.Warning, duration=3)
             return
         rvrange, segCnt, rvunits = self.getUnitStr(rvlist, self.selectedRadialUnit)
         cvrange, bandCnt, cvunits = self.getUnitStr(cvlist, self.selectedCircleUnit)
         if rvunits is None or cvunits is None:
-            self.iface.messageBar().pushMessage("", "There is too large of a year range to create chart" , level=Qgis.Warning, duration=3)
+            self.iface.messageBar().pushMessage("", "There is too large of a year range to create chart" , level=Qgis.MessageLevel.Warning, duration=3)
             return
         
         # Create the web page with all the JavaScript variables
@@ -321,7 +321,7 @@ class HeatmapDialog(QDialog, FORM_CLASS):
         try:
             fout = open(filename, 'w')
         except:
-            self.iface.messageBar().pushMessage("", "Error opening output file" , level=Qgis.Critical, duration=3)
+            self.iface.messageBar().pushMessage("", "Error opening output file" , level=Qgis.MessageLevel.Critical, duration=3)
             return
         fout.write(html)
         fout.close()

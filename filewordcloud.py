@@ -35,7 +35,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'WIDTH',
                 'Output image width',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=500
             )
         )
@@ -43,7 +43,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'HEIGHT',
                 'Output image height',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=500
             )
         )
@@ -51,7 +51,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MAX_WORDS',
                 'Maximum number of words',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=200
             )
         )
@@ -59,7 +59,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MIN_FONT',
                 'Minimum font size',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=4
             )
         )
@@ -67,7 +67,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MAX_FONT',
                 'Maximum font size (0 = Automatic sizing)',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=0
             )
         )
@@ -75,7 +75,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterNumber(
                 'MIN_WORD_LEN',
                 'Minimum word length',
-                type=QgsProcessingParameterNumber.Integer,
+                type=QgsProcessingParameterNumber.Type.Integer,
                 defaultValue=0
             )
         )
@@ -155,7 +155,7 @@ class FileWordCloudAlgorithm(QgsProcessingAlgorithm):
         file = os.path.dirname(__file__) + '/index.html'
         if not os.path.exists(file):
             return ''
-        return QUrl.fromLocalFile(file).toString(QUrl.FullyEncoded)
+        return QUrl.fromLocalFile(file).toString(QUrl.ComponentFormattingOption.FullyEncoded)
 
     def createInstance(self):
         return FileWordCloudAlgorithm()
